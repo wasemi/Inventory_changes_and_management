@@ -37,3 +37,37 @@ CREATE TABLE inventory_logs (
 	stock_after_change int,
 	log_notes VARCHAR (200)
 ```
+```sql
+SELECT * FROM inventory_logs
+```
+```sql
+SELECT log_id, product_id, timestamp, change_type, quantity_changed, stock_after_change, log_notes,  
+         ROW_NUMBER() OVER (
+            PARTITION BY log_id, product_id, timestamp, change_type, quantity_changed, stock_after_change, log_notes
+            ORDER BY timestamp) AS rn
+FROM inventory_logs
+```
+```sql
+SELECT SUM(CASE WHEN log_id IS NULL OR log_id = ' ' THEN 1 ELSE 0 END) AS log_id,
+	SUM(CASE WHEN product_id IS NULL OR product_id = ' ' THEN 1 ELSE 0 END) AS product_id,
+	SUM(CASE WHEN timestamp IS NULL THEN 1 ELSE 0 END) AS timestamp, 
+	SUM(CASE WHEN change_type IS NULL OR change_type = ' ' THEN 1 ELSE 0 END) AS change_type,
+	SUM(CASE WHEN quantity_changed IS NULL THEN 1 ELSE 0 END) AS quantity_changed,
+	SUM(CASE WHEN stock_after_change IS NULL THEN 1 ELSE 0 END) AS stock_after_change,
+	SUM(CASE WHEN log_notes IS NULL OR log_notes = ' ' THEN 1 ELSE 0 END) AS log_notes
+FROM inventory_logs
+```
+```sql
+SELECT
+    percentile_disc(0.5) WITHIN GROUP (ORDER BY stock_after_change) AS median_score
+FROM
+    inventory_logs;
+
+UPDATE inventory_logs
+SET stock_after_change = 999
+WHERE stock_after_change IS NULL;
+
+UPDATE inventory_logs
+SET timestamp = CURRENT_DATE
+WHERE timestamp IS NULL;
+```
