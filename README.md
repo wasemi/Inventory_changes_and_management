@@ -71,3 +71,23 @@ UPDATE inventory_logs
 SET timestamp = CURRENT_DATE
 WHERE timestamp IS NULL;
 ```
+```sql
+SELECT
+  product_id,
+  SUM(CASE WHEN change_type = 'Inventory_Adjustment_Manual' THEN 1 ELSE 0 END) AS Inventory_Adjustment_Manual,
+  SUM(CASE WHEN change_type = 'Stock_Transfer_Out' THEN 1 ELSE 0 END) AS Stock_Transfer_Out,
+  SUM(CASE WHEN change_type = 'Stock_Correction_Remove' THEN 1 ELSE 0 END) AS Stock_Correction_Remove,
+  COUNT(*) AS total_changes
+FROM
+  inventory_logs
+GROUP BY
+  product_id
+ORDER BY
+  total_changes DESC;
+```
+### Findings
+- These products are the top 5 with the highest inventory changes  PROD0021, PROD0014, PROD0030, PROD0028, PROD0031.
+- Date added for some products is far from the last updated date, this means that the inventory does not update automatically when a product is added or taken out.
+
+### Recommendations
+- An automated inventory system where items are updated automatically once there is an inventory change.
