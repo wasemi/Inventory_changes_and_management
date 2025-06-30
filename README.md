@@ -91,3 +91,6 @@ ORDER BY
 
 ### Recommendations
 - An automated inventory system where items are updated automatically once there is an inventory change.
+- An audit performed of the entire inventory system and processes.
+- Training of staff to ensure efficiency in data imputations and counts
+- Investigate suppliers and check supplies frequently.
