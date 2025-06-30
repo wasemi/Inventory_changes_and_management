@@ -11,3 +11,11 @@ Four data sources are used for this analysis, inventory logs data which has info
 - Excel - used in initial cleaning of the data
 - SQL - used in analysing the data and answering the question statement
 - Power Bi - creating the report for this analysis
+
+### Data Prepartion and Cleaning
+We perforemed the following task at the initial stage
+- Loading the data into Excel to see the content
+- Used Power Query to do an exploratory data analysis to understand the data
+- We performed data standization of date and other columns
+- handled nulls in some columns
+- 
